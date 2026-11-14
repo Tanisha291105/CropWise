@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CropWise
 
 CropWise is a Streamlit application that recommends a crop from soil nutrient and local weather readings. Enter your farm values to see the model's best match, its confidence score, and the ranking of all crops supported by the model.
@@ -118,3 +119,6 @@ CropWise/
 ├── test_model.py                   # Interactive prediction and test evaluation
 └── requirements.txt                # Python dependencies
 ```
+=======
+# CropWise
+>>>>>>> ed67f4f60590b9e8737365e7b814d3405c5a4f89
