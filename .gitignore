@@ -1,0 +1,16 @@
+# Python environments and generated files
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Local Streamlit credentials
+.streamlit/secrets.toml
+
+# Test and build artifacts
+.pytest_cache/
+build/
+dist/
+*.log
