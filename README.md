@@ -1,40 +1,79 @@
-<<<<<<< HEAD
 # CropWise
 
-CropWise is a Streamlit application that recommends a crop from soil nutrient and local weather readings. Enter your farm values to see the model's best match and a probability breakdown for all supported crops.
+CropWise is a Streamlit-based crop recommendation application that helps farmers and agronomists estimate the best crop to plant using soil nutrients and weather conditions. The app collects values for nitrogen, phosphorus, potassium, soil pH, temperature, humidity, and rainfall, predicts the most suitable crop, and shows the confidence of all supported crop matches.
+
+This project uses a trained machine learning model on agricultural field data and provides a simple, interactive interface for Fast recommendations.
+
+## Overview
+
+CropWise is designed for quick crop selection decisions based on farm input values. It does not fetch live weather data; instead, the user enters relevant readings manually. The application compares all supported crop classes and ranks them by predicted probability so that the recommendation is interpretable.
 
 ## Features
 
-- Accepts nitrogen (N), phosphorus (P), potassium (K), soil pH, temperature, humidity, and rainfall.
-- Recommends one crop without displaying its confidence score in the recommendation.
-- Shows the model probabilities for all 22 supported crops in a ranked horizontal bar chart.
-- Includes sample inputs and a session-based prediction history.
-- Warns when an input is outside the range observed in the training dataset.
-- Uses a simple light theme configured in `.streamlit/config.toml`.
+- Accepts seven input features:
+  - Nitrogen (N)
+  - Phosphorus (P)
+  - Potassium (K)
+  - Soil pH
+  - Temperature (°C)
+  - Humidity (%)
+  - Rainfall (mm)
+- Recommends the most likely crop based on a trained classifier.
+- Displays ranked crop probabilities for all 22 supported crops in a horizontal bar chart.
+- Shows a description and emoji for the recommended crop.
+- Includes a sample values button that fills in a realistic example dataset.
+- Warns when an input falls outside the minimum and maximum range seen in the training dataset.
+- Stores prediction history during the current Streamlit session.
+- Provides a separate Prediction History page with total predictions and a clear-history option.
+- Uses a light green agronomy-themed UI configured in `.streamlit/config.toml`.
 
-CropWise does not fetch live weather data. Enter the weather readings you want to use for the recommendation.
-
-## Supported crops
-
-The model is trained to classify these 22 dataset labels:
-
-`apple`, `banana`, `blackgram`, `chickpea`, `coconut`, `coffee`, `cotton`, `grapes`, `jute`, `kidneybeans`, `lentil`, `maize`, `mango`, `mothbeans`, `mungbean`, `muskmelon`, `orange`, `papaya`, `pigeonpeas`, `pomegranate`, `rice`, and `watermelon`.
-
-## Requirements
+## Tech Stack
 
 - Python
+- Streamlit
 - pandas
 - numpy
 - matplotlib
 - seaborn
 - scikit-learn
-- streamlit
 - joblib
-Run commands from the CropWise project root. The app loads its model and dataset using paths relative to that directory.
+
+## Supported Crops
+
+The model is trained to classify these 22 crops:
+
+apple, banana, blackgram, chickpea, coconut, coffee, cotton, grapes, jute, kidneybeans, lentil, maize, mango, mothbeans, mungbean, muskmelon, orange, papaya, pigeonpeas, pomegranate, rice, watermelon
+
+## Project Structure
+
+```text
+CropWise/
+├── .streamlit/
+│   └── config.toml                 # Light theme and minimal Streamlit toolbar
+├── dataset/
+│   └── Crop_recommendation.csv     # Agricultural dataset used for training and testing
+├── model/
+│   └── crop_model.pkl              # Saved trained classifier
+├── app.py                          # Streamlit web app UI and prediction logic
+├── main.py                         # Model training and evaluation script
+├── test_model.py                   # CLI prediction and test evaluation script
+├── requirements.txt                # Python dependencies
+├── README.md                      # Project documentation
+└── .venv/                         # Optional local virtual environment (not tracked in git)
+```
+
+## Requirements
+
+Make sure Python is installed, then install the project dependencies from the project root:
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
 
 ## Setup on Windows
 
-Open PowerShell in the project folder and create a virtual environment:
+Open PowerShell in the CropWise folder and create a virtual environment:
 
 ```powershell
 py -m venv .venv
@@ -43,82 +82,162 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-If PowerShell prevents environment activation, call the environment's executables directly:
+If PowerShell blocks activation, run the environment's Python directly:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## Run the application
+Run commands from the project root so relative paths work correctly.
 
-From the project root, start the Streamlit app:
+## Run the Application
+
+Start the Streamlit application:
 
 ```powershell
 streamlit run app.py
 ```
 
-If you did not activate the environment, use:
+If the virtual environment is not activated, use:
 
 ```powershell
 .\.venv\Scripts\streamlit.exe run app.py
 ```
 
-In the **Crop Recommendation** page:
+### Using the app
 
-1. Enter soil test values for N, P, K, and pH.
-2. Enter temperature, humidity, and rainfall values.
-3. Select **Get my crop recommendation**.
-4. Review the recommended crop. Expand **Compare all crop matches** to view the ranked probability chart.
+1. Open the CropWise app in the browser.
+2. On the Crop Recommendation page, enter farm values for N, P, K, pH, temperature, humidity, and rainfall.
+3. Click `Get my crop recommendation`.
+4. Review the recommended crop and the probability ranking under `Compare all crop matches`.
+5. Use `Try Sample Values` to load a standard example input.
+6. View prior predictions in the `Prediction History` page.
 
-Use **Try Sample Values** to populate an example set of values. **Prediction History** stores predictions for the current Streamlit session; it is not a permanent database.
+Prediction history is saved only in the current Streamlit session and is not a permanent database.
 
-## Test a prediction and evaluate the model
+## Test a Prediction and Evaluate the Model
 
-Run the interactive test script from the project root:
+Run the interactive prediction script:
 
 ```powershell
 python test_model.py
 ```
 
-The script prompts for the same seven soil and weather inputs. Enter a number at each prompt, or press Enter to use the displayed sample value. It prints a crop prediction and confidence, then reports accuracy and a classification report for the test split.
+The script prompts for crop inputs and accepts either a value or a blank entry to use the default sample value. It prints:
 
-Without environment activation:
+- The predicted crop
+- Prediction confidence (%)
+- Test dataset accuracy
+- Classification report for the evaluated model
+
+If the virtual environment is not activated:
 
 ```powershell
 .\.venv\Scripts\python.exe test_model.py
 ```
 
-## Retrain the model
+## Retrain the Model
 
-The training script compares a Decision Tree with a 100-estimator Random Forest using a stratified 80/20 train/test split. It displays the model metrics and a confusion matrix, then saves the better-performing model to `model/crop_model.pkl`.
+The training script compares a Decision Tree model and a 100-estimator Random Forest classifier using a stratified 80/20 train/test split. It evaluates both models, chooses the better-performing one, and saves it to `model/crop_model.pkl`.
+
+Run it with:
 
 ```powershell
 python main.py
 ```
 
-Retraining overwrites the existing model file. Run this from the project root so the relative dataset and model paths resolve correctly.
+This command overwrites the saved model file. Always run it from the project root so the dataset and model paths resolve correctly.
 
-## Dataset and model
+## Dataset and Model Details
 
-`dataset/Crop_recommendation.csv` contains 2,200 rows with seven input features (`N`, `P`, `K`, `temperature`, `humidity`, `ph`, and `rainfall`) and a target `label` identifying one of the 22 crops. The trained model is stored at `model/crop_model.pkl`.
-
-Model confidence is the predicted class probability, not a guarantee of crop success or yield. Recommendations are limited to the crops and conditions represented in the dataset. Use reliable soil test results and local agricultural guidance when making planting decisions.
-
-## Project structure
+The dataset file is:
 
 ```text
-CropWise/
-├── .streamlit/
-│   └── config.toml                 # Streamlit theme and minimal toolbar
-├── dataset/
-│   └── Crop_recommendation.csv     # Training and evaluation data
-├── model/
-│   └── crop_model.pkl              # Trained classifier used by the app
-├── app.py                          # Streamlit user interface
-├── main.py                         # Model training and evaluation
-├── test_model.py                   # Interactive prediction and test evaluation
-└── requirements.txt                # Python dependencies
+dataset/Crop_recommendation.csv
 ```
-=======
-# CropWise
->>>>>>> ed67f4f60590b9e8737365e7b814d3405c5a4f89
+
+It contains 2,200 rows with the following feature columns:
+
+- `N`
+- `P`
+- `K`
+- `temperature`
+- `humidity`
+- `ph`
+- `rainfall`
+
+The target column is:
+
+- `label`
+
+The script loads the data, splits it into training and testing sets, compares model performance, and saves the best model into:
+
+```text
+model/crop_model.pkl
+```
+
+### Model notes
+
+- Confidence is based on predicted class probability.
+- The recommendation is limited to the crops and conditions represented in the dataset.
+- Predictions may be less reliable if you enter values outside the training data range.
+- Use professional agronomy advice and actual soil tests when making planting decisions.
+
+## App Behavior Details
+
+The app includes several practical checks before and after prediction:
+
+- It validates input column order against the model's expected feature list.
+- It compares each input against the dataset's observed minimum and maximum range.
+- It shows a warning when a value is outside the training range.
+- It ranks all crop probability scores from highest to lowest.
+- It stores a prediction history for the active session.
+
+## UI Theme
+
+The application uses a light green theme with a minimal toolbar configuration defined in:
+
+```toml
+.streamlit/config.toml
+```
+
+This file sets:
+
+- light base theme
+- green primary accent
+- white secondary backgrounds
+- minimal toolbar mode
+
+## Example Inputs
+
+The app also includes a sample dataset button with the following values:
+
+- Nitrogen: 90.0
+- Phosphorus: 42.0
+- Potassium: 43.0
+- Temperature: 20.8°C
+- Humidity: 82.0%
+- Soil pH: 6.5
+- Rainfall: 202.9 mm
+
+These values are useful for testing the recommendation flow quickly.
+
+## Notes
+
+- CropWise does not connect to a live weather API.
+- Weather values must be manually entered by the user.
+- The prediction history is session-based only and resets when the session ends.
+- The model is intended as a decision-support tool rather than a final agronomic guarantee.
+
+## License
+
+This project is intended for educational and personal use. If you are deploying it for a production or commercial environment, verify the licensing and data-use constraints of the dataset and dependencies before use.
+
+## Quick Start
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+streamlit run app.py
+```
