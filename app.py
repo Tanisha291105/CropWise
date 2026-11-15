@@ -43,7 +43,7 @@ st.markdown("""
     --forest-700: #0f422e;
     --forest-600: #1a563d;
     --paper: #f7faf7;
-    --paper-card: rgba(255, 255, 255, 0.92);
+    --paper-card: rgba(255, 255, 255, 0.68);
     --ink: #12281d;
     --ink-muted: #536e60;
     --border-subtle: rgba(16, 185, 129, 0.14);
@@ -59,9 +59,11 @@ html, body, [class*="css"], .stApp {
 
 .stApp,
 [data-testid="stAppViewContainer"] {
-    background: radial-gradient(circle at 12% 15%, rgba(16, 185, 129, 0.06) 0%, transparent 45%),
-                radial-gradient(circle at 88% 82%, rgba(52, 211, 153, 0.07) 0%, transparent 50%),
-                linear-gradient(180deg, #f8faf8 0%, #f1f6f2 100%);
+    background: radial-gradient(circle at 16% 25%, rgba(16, 185, 129, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 84% 65%, rgba(52, 211, 153, 0.13) 0%, transparent 50%),
+                radial-gradient(circle at 50% 88%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 12% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+                linear-gradient(180deg, #f7faf8 0%, #edf5f0 100%);
     color: var(--ink);
 }
 
@@ -307,6 +309,8 @@ html, body, [class*="css"], .stApp {
 .main .block-container {
     max-width: 1140px;
     padding: 2rem 2.25rem 3.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 /* Sidebar Modernization */
@@ -558,27 +562,57 @@ html, body, [class*="css"], .stApp {
     transition: transform 0.25s ease;
 }
 
-/* Glassmorphic Container Cards */
-[data-testid="stVerticalBlockBorderWrapper"] {
-    background: var(--paper-card);
-    border: 1px solid rgba(16, 185, 129, 0.15) !important;
-    border-radius: 22px !important;
-    box-shadow: 0 4px 20px -2px rgba(10, 40, 26, 0.05),
-                0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
-    backdrop-filter: blur(14px);
+/* Glassmorphic Container Cards (Soil Nutrients & Weather Conditions) */
+[data-testid="stVerticalBlockBorderWrapper"],
+.st-key-soil_nutrients_card,
+.st-key-weather_conditions_card,
+.st-key-soil_nutrients_card [data-testid="stVerticalBlockBorderWrapper"],
+.st-key-weather_conditions_card [data-testid="stVerticalBlockBorderWrapper"] {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.72) 0%,
+        rgba(240, 252, 245, 0.58) 50%,
+        rgba(255, 255, 255, 0.65) 100%
+    ) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 14px 38px -6px rgba(16, 185, 129, 0.12),
+                0 4px 16px -2px rgba(5, 29, 19, 0.05),
+                inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 2px 0 rgba(16, 185, 129, 0.12) !important;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.4rem;
+    position: relative;
+    z-index: 1;
 }
 
-[data-testid="stVerticalBlockBorderWrapper"]:hover {
-    border-color: rgba(16, 185, 129, 0.32) !important;
-    box-shadow: 0 14px 34px -4px rgba(16, 185, 129, 0.12),
-                0 0 0 1px rgba(16, 185, 129, 0.15) inset !important;
-    transform: translateY(-2px);
+[data-testid="stVerticalBlockBorderWrapper"] > div,
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"],
+.st-key-soil_nutrients_card > div,
+.st-key-weather_conditions_card > div {
+    background: transparent !important;
 }
 
-[data-testid="stVerticalBlockBorderWrapper"]:hover .step-number {
-    transform: scale(1.08) rotate(3deg);
+[data-testid="stVerticalBlockBorderWrapper"]:hover,
+.st-key-soil_nutrients_card:hover [data-testid="stVerticalBlockBorderWrapper"],
+.st-key-weather_conditions_card:hover [data-testid="stVerticalBlockBorderWrapper"],
+.st-key-soil_nutrients_card:hover,
+.st-key-weather_conditions_card:hover {
+    border-color: rgba(16, 185, 129, 0.38) !important;
+    box-shadow: 0 20px 46px -8px rgba(16, 185, 129, 0.20),
+                0 8px 24px -4px rgba(5, 29, 19, 0.08),
+                inset 0 1.5px 1px 0 #ffffff,
+                inset 0 -1px 2px 0 rgba(16, 185, 129, 0.18) !important;
+    transform: translateY(-3px);
+}
+
+[data-testid="stVerticalBlockBorderWrapper"]:hover .step-number,
+.st-key-soil_nutrients_card:hover .step-number,
+.st-key-weather_conditions_card:hover .step-number {
+    transform: scale(1.1) rotate(4deg);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45);
 }
 
 /* Input Fields */
@@ -595,21 +629,22 @@ html, body, [class*="css"], .stApp {
 }
 
 [data-testid="stNumberInput"] div[data-baseweb="input"] {
-    background: #ffffff !important;
-    border: 1.5px solid #dce8dd !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1.5px solid rgba(16, 185, 129, 0.20) !important;
     border-radius: 13px !important;
     transition: all 0.25s ease !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) inset;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(16, 185, 129, 0.04) !important;
 }
 
 [data-testid="stNumberInput"] div[data-baseweb="input"]:hover {
-    border-color: #a4cead !important;
+    border-color: #10b981 !important;
+    background: #ffffff !important;
 }
 
 [data-testid="stNumberInput"] div[data-baseweb="input"]:focus-within {
     border-color: #10b981 !important;
-    box-shadow: 0 0 0 3.5px rgba(16, 185, 129, 0.18) !important;
-    background: #fcfffc !important;
+    box-shadow: 0 0 0 3.5px rgba(16, 185, 129, 0.22) !important;
+    background: #ffffff !important;
 }
 
 [data-testid="stNumberInput"] input {
@@ -1226,7 +1261,7 @@ if page == "Crop Recommendation":
     # SOIL NUTRIENTS
     # ----------------------------------------------
 
-    with st.container(border=True):
+    with st.container(border=True, key="soil_nutrients_card"):
         st.markdown(
             '<div class="section-heading"><span class="step-number">01</span> Soil nutrients</div>',
             unsafe_allow_html=True
@@ -1262,7 +1297,7 @@ if page == "Crop Recommendation":
                 key="ph"
             )
 
-    with st.container(border=True):
+    with st.container(border=True, key="weather_conditions_card"):
         st.markdown(
             '<div class="section-heading"><span class="step-number">02</span> Weather conditions</div>',
             unsafe_allow_html=True
