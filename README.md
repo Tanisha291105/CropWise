@@ -1,13 +1,13 @@
 <<<<<<< HEAD
 # CropWise
 
-CropWise is a Streamlit application that recommends a crop from soil nutrient and local weather readings. Enter your farm values to see the model's best match, its confidence score, and the ranking of all crops supported by the model.
+CropWise is a Streamlit application that recommends a crop from soil nutrient and local weather readings. Enter your farm values to see the model's best match and a probability breakdown for all supported crops.
 
 ## Features
 
 - Accepts nitrogen (N), phosphorus (P), potassium (K), soil pH, temperature, humidity, and rainfall.
-- Recommends one crop and shows its predicted-class probability.
-- Lets you compare model probabilities for all 22 supported crops.
+- Recommends one crop without displaying its confidence score in the recommendation.
+- Shows the model probabilities for all 22 supported crops in a ranked horizontal bar chart.
 - Includes sample inputs and a session-based prediction history.
 - Warns when an input is outside the range observed in the training dataset.
 - Uses a simple light theme configured in `.streamlit/config.toml`.
@@ -68,7 +68,7 @@ In the **Crop Recommendation** page:
 1. Enter soil test values for N, P, K, and pH.
 2. Enter temperature, humidity, and rainfall values.
 3. Select **Get my crop recommendation**.
-4. Review the recommended crop and confidence. Expand **Compare all crop matches** to see the full ranking.
+4. Review the recommended crop. Expand **Compare all crop matches** to view the ranked probability chart.
 
 Use **Try Sample Values** to populate an example set of values. **Prediction History** stores predictions for the current Streamlit session; it is not a permanent database.
 
