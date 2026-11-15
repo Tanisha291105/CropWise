@@ -117,6 +117,19 @@ If the virtual environment is not activated, use:
 
 Prediction history is saved only in the current Streamlit session and is not a permanent database.
 
+## Deployment with Streamlit Community Cloud
+
+CropWise is deployed using [Streamlit Community Cloud](https://share.streamlit.io/). Visit the [live application](https://cropwise-bdu62d8rysyc9kappb6fhmp.streamlit.app/) to use it.
+
+To deploy your own instance:
+
+1. Push the project, including `app.py`, `requirements.txt`, `dataset/Crop_recommendation.csv`, and `model/crop_model.pkl`, to a GitHub repository.
+2. Sign in to Streamlit Community Cloud with GitHub and select **Create app**.
+3. Choose the repository and branch, and set the main file path to `app.py`.
+4. Select **Deploy**. Streamlit Community Cloud installs the packages listed in `requirements.txt` and launches the app.
+
+Keep the dataset and trained model in the repository at the paths expected by the app. Future pushes to the selected branch can trigger an app update.
+
 ## Test a Prediction and Evaluate the Model
 
 Run the interactive prediction script:
