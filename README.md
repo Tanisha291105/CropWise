@@ -1,6 +1,8 @@
 # CropWise
 
-CropWise is a Streamlit-based crop recommendation application that helps farmers and agronomists estimate the best crop to plant using soil nutrients and weather conditions. The app collects values for nitrogen, phosphorus, potassium, soil pH, temperature, humidity, and rainfall, predicts the most suitable crop, and shows the confidence of all supported crop matches.
+**Live application:** [Open CropWise](https://cropwise-bdu62d8rysyc9kappb6fhmp.streamlit.app/)
+
+CropWise is a crop recommendation application that helps farmers and agronomists estimate the best crop to plant using soil nutrients and weather conditions. The app collects values for nitrogen, phosphorus, potassium, soil pH, temperature, humidity, and rainfall, predicts the most suitable crop, and shows the confidence of all supported crop matches.
 
 This project uses a trained machine learning model on agricultural field data and provides a simple, interactive interface for Fast recommendations.
 
@@ -147,6 +149,15 @@ python main.py
 ```
 
 This command overwrites the saved model file. Always run it from the project root so the dataset and model paths resolve correctly.
+
+### Machine learning models
+
+The training script compares two supervised classification algorithms:
+
+- **Decision Tree** (`DecisionTreeClassifier`): a single tree that learns a sequence of feature-based decisions.
+- **Random Forest** (`RandomForestClassifier`): an ensemble of 100 decision trees whose predictions are combined.
+
+Both models are evaluated on the same stratified 80/20 train/test split (with `random_state=42`). The script saves whichever model achieves the higher test accuracy; if their accuracies tie, it saves the Decision Tree. The model currently stored in `model/crop_model.pkl` is a **Random Forest**. After retraining, the selected model may change based on the evaluation results.
 
 ## Dataset and Model Details
 
